@@ -1,4 +1,4 @@
-import 'consts/my_icons.dart';
+import 'package:ecommerce_app/consts/my_icons.dart';
 import 'package:ecommerce_app/screens/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/home.dart';
@@ -22,10 +22,10 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   void initState() {
     _pages = [
       HomeScreen(),
-      SearchScreen(),
       FeedsScreen(),
+      SearchScreen(),
+      CartScreen(),
       UserScreen(),
-      CartScreen()
     ];
     super.initState();
   }
@@ -55,7 +55,10 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(MyAppIcons.home), tooltip: 'Home', label: 'Home'),
+                  icon: Icon(MyAppIcons.home),
+                  tooltip: 'Home',
+                  label: 'Home'
+              ),
               BottomNavigationBarItem(
                 icon: Icon(MyAppIcons.feeds),
                 tooltip: 'Feeds',
