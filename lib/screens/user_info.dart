@@ -30,11 +30,9 @@ class _UserScreenState extends State<UserScreen> {
     });
   }
 
-  //bool _value = false;
-
   @override
   Widget build(BuildContext context) {
-    final themeChange=Provider.of<DarkThemeProvider>(context);
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     return Scaffold(
         body: Stack(
       children: [
@@ -222,7 +220,8 @@ class _UserScreenState extends State<UserScreen> {
               ),
             )
           ],
-        )
+        ),
+        _buildFab()
       ],
     ));
   }
@@ -257,7 +256,7 @@ class _UserScreenState extends State<UserScreen> {
       right: 16.0,
       child: Transform(
         transform: Matrix4.identity()..scale(scale),
-        alignment: Alignment.center,
+        alignment: Alignment.bottomRight,
         child: FloatingActionButton(
           backgroundColor: Colors.purple,
           heroTag: "btn1",
