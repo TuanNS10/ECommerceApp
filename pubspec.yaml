@@ -34,6 +34,9 @@ dependencies:
   shared_preferences: ^2.0.6
   flutter_staggered_grid_view: ^0.4.0
   badges: ^2.0.1
+  backdrop: ^0.4.7
+  carousel_pro: ^1.0.0
+  flutter_swiper: ^1.1.6
 
 dev_dependencies:
   flutter_test:
@@ -52,8 +55,26 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/images/emptycart.png
-  
+    - assets/images/emptycart.png
+    - assets/images/carousel1.png
+    - assets/images/carousel2.jpeg
+    - assets/images/carousel3.jpg
+    - assets/images/carousel4.png
+    - assets/images/addidas.jpg
+    - assets/images/apple.jpg
+    - assets/images/dell.jpg
+    - assets/images/h&m.jpg
+    - assets/images/nike.jpg
+    - assets/images/samsung.jpg
+    - assets/images/huawei.jpg
+    - assets/images/CatClothes.png
+    - assets/images/CatFurnitures.png
+    - assets/images/CatLaptops.jpg
+    - assets/images/CatPhones.jpg
+    - assets/images/CatPhone.jpg
+    - assets/images/CatShoes.jpg
+    - assets/images/CatWatchs.jpg
+    - assets/images/CatBeauty.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
