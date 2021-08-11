@@ -1,6 +1,8 @@
 import 'package:backdrop/backdrop.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
+import 'package:ecommerce_app/widget/backlayer.dart';
 import 'package:ecommerce_app/widget/category.dart';
 import 'package:ecommerce_app/widget/popular_products.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeScreen> {
-  List _caroselImages = [
+  List _carouselImages = [
     'assets/images/carousel1.png',
     'assets/images/carousel2.jpeg',
     'assets/images/carousel3.jpg',
@@ -21,7 +23,7 @@ class _HomeState extends State<HomeScreen> {
   ];
 
   List _brandImages = [
-    'assets/images/addidas.jpg',
+    'assets/images/adidas.jpg',
     'assets/images/apple.jpg',
     'assets/images/dell.jpg',
     'assets/images/h&m.jpg',
@@ -63,9 +65,7 @@ class _HomeState extends State<HomeScreen> {
             )
           ],
         ),
-        backLayer: Center(
-          child: Text('Back Layer'),
-        ),
+        backLayer: BackLayerMenu(),
         frontLayer: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,10 +85,10 @@ class _HomeState extends State<HomeScreen> {
                   showIndicator: true,
                   indicatorBgPadding: 5.0,
                   images: [
-                    ExactAssetImage(_caroselImages[0]),
-                    ExactAssetImage(_caroselImages[1]),
-                    ExactAssetImage(_caroselImages[2]),
-                    ExactAssetImage(_caroselImages[3])
+                    ExactAssetImage(_carouselImages[0]),
+                    ExactAssetImage(_carouselImages[1]),
+                    ExactAssetImage(_carouselImages[2]),
+                    ExactAssetImage(_carouselImages[3])
                   ],
                 ),
               ),
@@ -122,7 +122,14 @@ class _HomeState extends State<HomeScreen> {
                     ),
                     Spacer(),
                     FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            BrandNavigationRailScreen.routeName,
+                            arguments: {
+                              7
+                            }
+                          );
+                        },
                         child: Text(
                           'View all...',
                           style: TextStyle(
@@ -141,7 +148,14 @@ class _HomeState extends State<HomeScreen> {
                   autoplay: true,
                   viewportFraction: 0.8,
                   scale: 0.9,
-                  onTap: (index) {},
+                  onTap: (index) {
+                    Navigator.of(context).pushNamed(
+                      BrandNavigationRailScreen.routeName,
+                      arguments: {
+                        index,
+                      }
+                    );
+                  },
                   itemBuilder: (BuildContext ctx, int index) {
                     return ClipRect(
                       clipBehavior: Clip.antiAlias,
@@ -197,3 +211,4 @@ class _HomeState extends State<HomeScreen> {
     );
   }
 }
+
