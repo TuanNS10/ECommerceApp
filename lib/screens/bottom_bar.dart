@@ -6,7 +6,6 @@ import 'package:ecommerce_app/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/screens/user_info.dart';
 
-
 class BottomBarScreen extends StatefulWidget {
   static const routeName = '/BottomBarScreen';
 
@@ -55,10 +54,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(MyAppIcons.home),
-                  tooltip: 'Home',
-                  label: 'Home'
-              ),
+                  icon: Icon(MyAppIcons.home), tooltip: 'Home', label: 'Home'),
               BottomNavigationBarItem(
                 icon: Icon(MyAppIcons.feeds),
                 tooltip: 'Feeds',

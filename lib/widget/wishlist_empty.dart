@@ -1,26 +1,28 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartEmpty extends StatelessWidget {
+class WishlistEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           margin: EdgeInsets.only(top: 80),
           width: double.infinity,
           height: MediaQuery.of(context).size.height * 0.4,
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage('assets/images/empty_cart.png'))),
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage('assets/images/empty_wishlist.png'),
+            ),
+          ),
         ),
         Text(
-          'Your Cart Is Empty',
+          'Your Wish List Is Empty',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Theme.of(context).textSelectionColor,
@@ -31,7 +33,7 @@ class CartEmpty extends StatelessWidget {
           height: 30,
         ),
         Text(
-          'Looks Like You din\'t \n add anything to your cart yet',
+          'Explore more and shortlist some items',
           textAlign: TextAlign.center,
           style: TextStyle(
               color: themeChange.darkTheme
@@ -44,8 +46,8 @@ class CartEmpty extends StatelessWidget {
           height: 30,
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.width * 0.09,
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.06,
           child: RaisedButton(
             onPressed: () {},
             shape: RoundedRectangleBorder(
@@ -54,15 +56,15 @@ class CartEmpty extends StatelessWidget {
             ),
             color: Colors.redAccent,
             child: Text(
-              'shop now'.toUpperCase(),
+              'Add a wish'.toUpperCase(),
+              textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).textSelectionColor,
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
-              ),
+                  color: Theme.of(context).textSelectionColor,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600),
             ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -1,30 +1,36 @@
+import 'package:ecommerce_app/widget/cart_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/widget/cart_full.dart';
 
 class CartScreen extends StatelessWidget {
+  static const routeName = '/CartScreen';
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomSheet: checkoutSection(context),
-      appBar: AppBar(
-        title: Text('Cart Item Count'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.delete),
-          )
-        ],
-      ),
-      body: Container(
-        margin: EdgeInsets.only(bottom: 60),
-        child: ListView.builder(
-            itemCount: 6,
-            itemBuilder: (BuildContext ctx, int index) {
-              return CartFull();
-            }),
-      ),
-    );
+    List wishlistList = [];
+    return wishlistList.isEmpty
+        ? Scaffold(body: CartEmpty())
+        : Scaffold(
+            bottomSheet: checkoutSection(context),
+            appBar: AppBar(
+              title: Text('Cart Item Count'),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.delete),
+                )
+              ],
+            ),
+            body: Container(
+              margin: EdgeInsets.only(bottom: 60),
+              child: ListView.builder(
+                  itemCount: 6,
+                  itemBuilder: (BuildContext ctx, int index) {
+                    return CartFull();
+                  }),
+            ),
+          );
   }
 
   Widget checkoutSection(BuildContext ctx) {
@@ -80,4 +86,3 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
-

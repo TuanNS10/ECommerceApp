@@ -36,7 +36,8 @@ class _FeedsProductsState extends State<FeedsProducts> {
                   ),
                 ),
                 Positioned(
-                  bottom: 0,
+                  top: 0,
+                  right: 0,
                   child: Badge(
                     alignment: Alignment.center,
                     toAnimate: true,

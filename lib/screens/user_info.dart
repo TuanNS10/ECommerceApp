@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/screens/wishlist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -114,7 +115,10 @@ class _UserScreenState extends State<UserScreen> {
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(WishlistScreen.routeName);
+                      },
                       splashColor: Colors.red,
                       child: ListTile(
                         title: Text('Wishlist'),
@@ -123,11 +127,17 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                   ),
-                  ListTile(
-                    onTap: () {},
-                    title: Text('Cart'),
-                    trailing: Icon(Icons.chevron_right_rounded),
-                    leading: Icon(Feather.shopping_cart),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {},
+                      splashColor: Colors.red,
+                      child: ListTile(
+                        title: Text('Cart'),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        leading: Icon(Feather.shopping_cart),
+                      ),
+                    ),
                   ),
                   ListTile(
                     title: Text('My Orders'),

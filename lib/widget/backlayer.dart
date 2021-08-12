@@ -1,10 +1,13 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
+import 'package:ecommerce_app/screens/carts.dart';
+import 'package:ecommerce_app/screens/feeds.dart';
+import 'package:ecommerce_app/screens/wishlist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BackLayerMenu extends StatelessWidget {
-  const BackLayerMenu({Key? key}) : super(key: key);
+  BackLayerMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -87,34 +90,36 @@ class BackLayerMenu extends StatelessWidget {
                     height: 100,
                     width: 100,
                     decoration: BoxDecoration(
-                        color: Theme
-                            .of(context)
-                            .backgroundColor,
-                        borderRadius: BorderRadius.circular(10.0)
-                    ),
+                        color: Theme.of(context).backgroundColor,
+                        borderRadius: BorderRadius.circular(10.0)),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
                           image: DecorationImage(
                               image: NetworkImage(
-                                  'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'
-                              ),
-                              fit: BoxFit.fill
-                          )
-                      ),
+                                  'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                              fit: BoxFit.fill)),
                     ),
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                content(context, () {}, 'Feeds', 0),
+                content(context, () {
+                  navigateTo(context, FeedsScreen.routeName);
+                }, 'Feeds', 0),
                 const SizedBox(height: 10.0),
-                content(context, () {}, 'Cart', 1),
+                content(context, () {
+                  navigateTo(context, CartScreen.routeName);
+                }, 'Cart', 1),
                 const SizedBox(height: 10.0),
-                content(context, () {}, 'Wishlist', 2),
+                content(context, () {
+                  navigateTo(context, WishlistScreen.routeName);
+                }, 'Wishlist', 2),
                 const SizedBox(height: 10.0),
-                content(context, () {}, 'Upload a new product', 3),
+                content(context, () {
+                  navigateTo(context, FeedsScreen.routeName);
+                }, 'Upload a new product', 3),
               ],
             ),
           ),
@@ -122,34 +127,36 @@ class BackLayerMenu extends StatelessWidget {
       ],
     );
   }
+
+  List _contentIcons = [
+    MyAppIcons.feeds,
+    MyAppIcons.bag,
+    MyAppIcons.wishlist,
+    MyAppIcons.upload
+  ];
+
+  void navigateTo(BuildContext ctx, String routeName) {
+    Navigator.of(ctx).pushNamed(routeName);
+  }
+
+  Widget content(
+      BuildContext ctx, final VoidCallback fct, String text, int index) {
+    return InkWell(
+      onTap: fct,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Icon(_contentIcons[index])
+        ],
+      ),
+    );
+  }
 }
-
-List _contentIcons = [
-  MyAppIcons.feeds,
-  MyAppIcons.bag,
-  MyAppIcons.wishlist,
-  MyAppIcons.upload
-];
-
-void navigateto(BuildContext ctx, String routeName) {
-  Navigator.of(ctx).pushNamed(routeName);
-}
-
-Widget content(BuildContext ctx, Function fct, String text, int index) {
-  return InkWell(
-    onTap: () {},
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(padding: const EdgeInsets.all(16.0),
-          child: Text(
-            text,
-            style: TextStyle(fontWeight: FontWeight.w700),
-            textAlign: TextAlign.center,
-          ),),
-        Icon(_contentIcons[index])
-      ],
-    ),
-  );
-}
-
