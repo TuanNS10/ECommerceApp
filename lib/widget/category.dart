@@ -1,9 +1,15 @@
+import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CategoryWidget extends StatelessWidget {
-  CategoryWidget({Key? key, required this.index}) : super(key: key);
+class CategoryWidget extends StatefulWidget {
+  const CategoryWidget({Key? key, required this.index}) : super(key: key);
   final int index;
+  @override
+  _CategoryWidgetState createState() => _CategoryWidgetState();
+}
+
+class _CategoryWidgetState extends State<CategoryWidget> {
   List categories = [
     {
       'categoryName': 'Phones',
@@ -34,20 +40,24 @@ class CategoryWidget extends StatelessWidget {
       'categoryImagesPath': 'assets/images/CatFurnitures.png'
     }
   ];
-
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: AssetImage(categories[index]['categoryImagesPath']),
-              fit: BoxFit.cover,
-            )),
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        width: 150,
-        height: 150,
+      InkWell(
+        onTap: (){
+          Navigator.of(context).pushNamed(CategoriesFeedsScreen.routeName, arguments:'${categories[widget.index]['categoryName']}' );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage(categories[widget.index]['categoryImagesPath']),
+                fit: BoxFit.cover,
+              )),
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          width: 150,
+          height: 150,
+        ),
       ),
       Positioned(
           bottom: 0,
@@ -57,7 +67,7 @@ class CategoryWidget extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             color: Theme.of(context).backgroundColor,
             child: Text(
-              categories[index]['categoryName'],
+              categories[widget.index]['categoryName'],
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
@@ -67,3 +77,5 @@ class CategoryWidget extends StatelessWidget {
     ]);
   }
 }
+
+

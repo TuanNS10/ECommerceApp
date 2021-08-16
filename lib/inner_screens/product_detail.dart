@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/screens/carts.dart';
 import 'package:ecommerce_app/screens/wishlist.dart';
 import 'package:ecommerce_app/widget/feeds_products.dart';
@@ -20,7 +21,8 @@ class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
-
+    final productsData = Provider.of<ProductsProvider>(context);
+    final productsList = productsData.products;
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -217,14 +219,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: 30),
+                  margin: EdgeInsets.only(bottom: 20),
                   width: double.infinity,
-                  height: 300,
+                  height: 340,
                   child: ListView.builder(
                     itemCount: 6,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext ctx, int index) {
-                      return FeedsProducts();
+                      return ChangeNotifierProvider.value(
+                          value: productsList[index], child: FeedsProducts());
                     },
                   ),
                 )

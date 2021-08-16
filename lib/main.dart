@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
+import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/screens/bottom_bar.dart';
@@ -62,6 +63,8 @@ class _MyAppState extends State<MyApp> {
                 WishlistScreen(),
             ProductDetails.routeName: (ctx)=>
                 ProductDetails(),
+            CategoriesFeedsScreen.routeName: (ctx)=>
+                CategoriesFeedsScreen(),
           },
         );
       }),
