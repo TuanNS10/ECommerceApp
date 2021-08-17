@@ -9,8 +9,12 @@ class FeedsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsProvider=Provider.of<ProductsProvider>(context);
-    List<Product> productsList=productsProvider.products;
+    final popular = ModalRoute.of(context)!.settings.arguments as String;
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    List<Product> productsList = productsProvider.products;
+    if (popular == 'popular') {
+      productsList = productsProvider.popularProducts;
+    }
     return Scaffold(
       body: GridView.count(
           crossAxisCount: 2,

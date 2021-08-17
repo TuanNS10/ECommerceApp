@@ -1,6 +1,8 @@
 import 'package:ecommerce_app/inner_screens/brands_rail_widget.dart';
+import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class BrandNavigationRailScreen extends StatefulWidget {
@@ -22,7 +24,7 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
   @override
   void didChangeDependencies() {
     routeArgs = ModalRoute.of(context)!.settings.arguments.toString();
-    //_selectedIndex = int.parse(routeArgs.substring(0));
+    _selectedIndex = int.parse(routeArgs.substring(1,2));
     print(routeArgs.toString());
     print(_selectedIndex);
     if (_selectedIndex == 0) {
@@ -198,6 +200,15 @@ class ContentSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsData=Provider.of<ProductsProvider>(context);
+    final productsBrand=productsData.findByBrand(brand);
+    if(brand=='All'){
+      for(int i=0;i < productsData.products.length;i++){
+        productsBrand.add(productsData.products[i]);
+      }
+    }
+    print('productsBrand ${productsBrand[0].imageUrl}');
+    print('brand $brand');
     return Expanded(
         child: Padding(
       padding: const EdgeInsets.fromLTRB(24, 8, 0, 0),
@@ -205,9 +216,12 @@ class ContentSpace extends StatelessWidget {
           context: context,
           removeTop: true,
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: productsBrand.length,
             itemBuilder: (BuildContext context, int index) =>
-                BrandsNavigationRail(),
+                ChangeNotifierProvider.value(
+                  value: productsBrand[index],
+                  child: BrandsNavigationRail(),
+                )
           )),
     ));
   }

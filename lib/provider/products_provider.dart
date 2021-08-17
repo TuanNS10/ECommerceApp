@@ -149,7 +149,7 @@ class ProductsProvider with ChangeNotifier {
         price: 88.88,
         imageUrl:
             'https://images-na.ssl-images-amazon.com/images/I/51KMhoElQcL._AC_UX466_.jpg',
-        brand: 'Addidas',
+        brand: 'Adidas',
         productCategoryName: 'Clothes',
         quantity: 8941,
         isPopular: true,
@@ -161,7 +161,7 @@ class ProductsProvider with ChangeNotifier {
         price: 68.29,
         imageUrl:
             'https://images-na.ssl-images-amazon.com/images/I/71lKAfQDUoL._AC_UX466_.jpg',
-        brand: 'Addidas',
+        brand: 'Adidas',
         productCategoryName: 'Clothes',
         quantity: 3,
         isPopular: false,
@@ -637,6 +637,14 @@ class ProductsProvider with ChangeNotifier {
     return [..._products];
   }
 
+  List<Product> get popularProducts {
+    return _products.where((element) => element.isPopular).toList();
+  }
+
+  Product findById(String productId){
+    return _products.firstWhere((element) => element.id==productId);
+  }
+
   List<Product> findByCategory(String categoryName) {
     var _categoryList = _products
         .where((element) => element.productCategoryName
@@ -644,5 +652,14 @@ class ProductsProvider with ChangeNotifier {
             .contains(categoryName.toLowerCase()))
         .toList();
     return _categoryList;
+  }
+
+  List<Product> findByBrand(String brandName) {
+    var _brandList = _products
+        .where((element) => element.brand
+            .toLowerCase()
+            .contains(brandName.toLowerCase()))
+        .toList();
+    return _brandList;
   }
 }

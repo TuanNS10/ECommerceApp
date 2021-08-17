@@ -2,12 +2,16 @@ import 'package:backdrop/backdrop.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
+import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/widget/backlayer.dart';
 import 'package:ecommerce_app/widget/category.dart';
 import 'package:ecommerce_app/widget/popular_products.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:provider/provider.dart';
+
+import 'feeds.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -34,6 +38,8 @@ class _HomeState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final productsData = Provider.of<ProductsProvider>(context);
+    final popularItems = productsData.popularProducts;
     return Scaffold(
       body: BackdropScaffold(
         frontLayerBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -124,11 +130,8 @@ class _HomeState extends State<HomeScreen> {
                     FlatButton(
                         onPressed: () {
                           Navigator.of(context).pushNamed(
-                            BrandNavigationRailScreen.routeName,
-                            arguments: {
-                              7
-                            }
-                          );
+                              BrandNavigationRailScreen.routeName,
+                              arguments: {7});
                         },
                         child: Text(
                           'View all...',
@@ -150,11 +153,10 @@ class _HomeState extends State<HomeScreen> {
                   scale: 0.9,
                   onTap: (index) {
                     Navigator.of(context).pushNamed(
-                      BrandNavigationRailScreen.routeName,
-                      arguments: {
-                        index,
-                      }
-                    );
+                        BrandNavigationRailScreen.routeName,
+                        arguments: {
+                          index,
+                        });
                   },
                   itemBuilder: (BuildContext ctx, int index) {
                     return ClipRect(
@@ -181,7 +183,10 @@ class _HomeState extends State<HomeScreen> {
                     ),
                     Spacer(),
                     FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(FeedsScreen.routeName,
+                              arguments: 'popular');
+                        },
                         child: Text(
                           'View all...',
                           style: TextStyle(
@@ -198,9 +203,10 @@ class _HomeState extends State<HomeScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 3),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 8,
-                  itemBuilder: (BuildContext ctx, int index){
-                    return PopularProducts();
+                  itemCount: popularItems.length,
+                  itemBuilder: (BuildContext ctx, int index) {
+                    return ChangeNotifierProvider.value(
+                        value: popularItems[index], child: PopularProducts());
                   },
                 ),
               )
@@ -211,4 +217,3 @@ class _HomeState extends State<HomeScreen> {
     );
   }
 }
-

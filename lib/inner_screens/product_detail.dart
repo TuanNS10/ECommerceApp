@@ -22,6 +22,9 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
     final productsData = Provider.of<ProductsProvider>(context);
+    final productId=ModalRoute.of(context)!.settings.arguments as String;
+    print('productId $productId');
+    final prodAttr=productsData.findById(productId);
     final productsList = productsData.products;
     return Scaffold(
       body: Stack(
@@ -32,7 +35,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             height: MediaQuery.of(context).size.height * 0.5,
             width: double.infinity,
             child: Image.network(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU'),
+                prodAttr.imageUrl),
           ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -96,7 +99,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.9,
                               child: Text(
-                                'title',
+                                prodAttr.title,
                                 maxLines: 2,
                                 style: TextStyle(
                                     fontSize: 28, fontWeight: FontWeight.w600),
@@ -106,7 +109,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: 8,
                             ),
                             Text(
-                              'US \$ 15',
+                              'US \$ ${prodAttr.price}',
                               style: TextStyle(
                                   color: themeState.darkTheme
                                       ? Theme.of(context).disabledColor
@@ -134,10 +137,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
-                          'Description',
+                          prodAttr.description,
                           style: TextStyle(
                             fontWeight: FontWeight.w800,
-                            fontSize: 21.0,
+                            fontSize: 18.0,
                             color: themeState.darkTheme
                                 ? Theme.of(context).disabledColor
                                 : ColorsConsts.subTitle,
@@ -155,10 +158,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                           height: 1,
                         ),
                       ),
-                      _detail(themeState.darkTheme, 'Brand: ', 'BrandName'),
-                      _detail(themeState.darkTheme, 'Quantity:  ', '12 Left'),
-                      _detail(themeState.darkTheme, 'Category:  ', 'Cat Name'),
-                      _detail(themeState.darkTheme, 'Popularity:  ', 'Popular'),
+                      _detail(themeState.darkTheme, 'Brand: ', prodAttr.brand),
+                      _detail(themeState.darkTheme, 'Quantity:  ', '${prodAttr.quantity}'),
+                      _detail(themeState.darkTheme, 'Category:  ', prodAttr.productCategoryName),
+                      _detail(themeState.darkTheme, 'Popularity:  ', prodAttr.isPopular?'Popular':'Brand new'),
                       SizedBox(
                         height: 15,
                       ),
