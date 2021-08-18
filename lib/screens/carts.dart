@@ -1,39 +1,48 @@
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/widget/cart_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/widget/cart_full.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/CartScreen';
 
   @override
   Widget build(BuildContext context) {
-    List wishlistList = [];
-    return wishlistList.isEmpty
+    final cartProvider=Provider.of<CartProvider>(context);
+    return cartProvider.getCartItems.isEmpty
         ? Scaffold(body: CartEmpty())
         : Scaffold(
-            bottomSheet: checkoutSection(context),
+            bottomSheet: checkoutSection(context, cartProvider.totalAmount),
             appBar: AppBar(
-              title: Text('Cart Item Count'),
+              backgroundColor: Theme.of(context).backgroundColor,
+              title: Text('Cart (${cartProvider.getCartItems.length})'),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {cartProvider.clearCart();},
                   icon: Icon(Icons.delete),
                 )
               ],
             ),
             body: Container(
+              // padding: const EdgeInsets.only(bottom: 30),
               margin: EdgeInsets.only(bottom: 60),
               child: ListView.builder(
-                  itemCount: 6,
+                  itemCount: cartProvider.getCartItems.length,
                   itemBuilder: (BuildContext ctx, int index) {
-                    return CartFull();
+                    return ChangeNotifierProvider.value(
+                      value: cartProvider.getCartItems.values.toList()[index],
+                      child: CartFull(
+                        productId: cartProvider.getCartItems.keys.toList()[index],
+                      ),
+                    );
                   }),
             ),
           );
   }
 
-  Widget checkoutSection(BuildContext ctx) {
+  Widget checkoutSection(BuildContext ctx, double subTotal) {
     return Container(
       decoration: BoxDecoration(
           border: Border(
@@ -74,7 +83,7 @@ class CartScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             Text(
-              ' US \$178.0',
+              ' \$${subTotal.toStringAsFixed(2)}',
               style: TextStyle(
                   color: Colors.blueAccent,
                   fontSize: 18,

@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
 import 'package:ecommerce_app/models/product.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -11,6 +12,7 @@ class PopularProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsAttributes = Provider.of<Product>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -103,14 +105,23 @@ class PopularProducts extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    cartProvider.addProductToCat(
+                                        productsAttributes.id,
+                                        productsAttributes.price,
+                                        productsAttributes.title,
+                                        productsAttributes.imageUrl);
+                                  },
                                   borderRadius: BorderRadius.circular(30.0),
-                                  child: Icon(
-                                    MaterialCommunityIcons.cart_plus,
-                                    size: 25,
-                                    color: Colors.black,
+                                    child: Icon(
+                                      cartProvider.getCartItems.containsKey(
+                                              productsAttributes.id)
+                                          ? MaterialCommunityIcons.check_all
+                                          : MaterialCommunityIcons.cart_plus,
+                                      size: 25,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                ),
                               ),
                             ),
                           )

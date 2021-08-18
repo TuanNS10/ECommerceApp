@@ -45,7 +45,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
     return Stack(children: [
       InkWell(
         onTap: (){
-          Navigator.of(context).pushNamed(CategoriesFeedsScreen.routeName, arguments:'${categories[widget.index]['categoryName']}' );
+          Navigator.pushNamed(context,CategoriesFeedsScreen.routeName, arguments:'${categories[widget.index]['categoryName']}' );
         },
         child: Container(
           decoration: BoxDecoration(

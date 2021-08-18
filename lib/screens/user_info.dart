@@ -12,12 +12,6 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-  //Just and late modifier here, late modifier mean that this variable must
-  //be initilized  later on, and we are initializing it in init state
-  // You also forget to initialize it in the init state
-  // late modifier can be used while declaring a non-nullable
-  // variable that’s initialized after its declaration.
-  //For more read https://dev.to/pktintali/late-variables-in-dart-dart-learning-series-1-2opf
 
   late ScrollController _scrollController;
   var top = 0.0;

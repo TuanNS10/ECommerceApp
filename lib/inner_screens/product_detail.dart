@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/screens/carts.dart';
@@ -22,9 +23,10 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
     final productsData = Provider.of<ProductsProvider>(context);
-    final productId=ModalRoute.of(context)!.settings.arguments as String;
+    final productId = ModalRoute.of(context)!.settings.arguments as String;
+    final cartProvider = Provider.of<CartProvider>(context);
     print('productId $productId');
-    final prodAttr=productsData.findById(productId);
+    final prodAttr = productsData.findById(productId);
     final productsList = productsData.products;
     return Scaffold(
       body: Stack(
@@ -34,8 +36,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             foregroundDecoration: BoxDecoration(color: Colors.black12),
             height: MediaQuery.of(context).size.height * 0.5,
             width: double.infinity,
-            child: Image.network(
-                prodAttr.imageUrl),
+            child: Image.network(prodAttr.imageUrl),
           ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -159,9 +160,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                         ),
                       ),
                       _detail(themeState.darkTheme, 'Brand: ', prodAttr.brand),
-                      _detail(themeState.darkTheme, 'Quantity:  ', '${prodAttr.quantity}'),
-                      _detail(themeState.darkTheme, 'Category:  ', prodAttr.productCategoryName),
-                      _detail(themeState.darkTheme, 'Popularity:  ', prodAttr.isPopular?'Popular':'Brand new'),
+                      _detail(themeState.darkTheme, 'Quantity:  ',
+                          '${prodAttr.quantity}'),
+                      _detail(themeState.darkTheme, 'Category:  ',
+                          prodAttr.productCategoryName),
+                      _detail(themeState.darkTheme, 'Popularity:  ',
+                          prodAttr.isPopular ? 'Popular' : 'Brand new'),
                       SizedBox(
                         height: 15,
                       ),
@@ -222,7 +226,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
+                  margin: EdgeInsets.only(bottom: 30),
                   width: double.infinity,
                   height: 340,
                   child: ListView.builder(
@@ -280,9 +284,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         shape: RoundedRectangleBorder(side: BorderSide.none),
                         color: Colors.redAccent.shade400,
-                        onPressed: () {},
+                        onPressed: () {
+                          cartProvider.addProductToCat(
+                              productId,
+                              prodAttr.price,
+                              prodAttr.title,
+                              prodAttr.imageUrl);
+                        },
                         child: Text(
-                          'Add to Cart'.toUpperCase(),
+                          cartProvider.getCartItems.containsKey(productId)
+                              ? 'In cart'
+                              : 'Add to Cart'.toUpperCase(),
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),

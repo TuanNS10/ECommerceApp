@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/screens/bottom_bar.dart';
 import 'package:ecommerce_app/consts/theme_data.dart';
@@ -44,7 +45,10 @@ class _MyAppState extends State<MyApp> {
         }),
         ChangeNotifierProvider(
           create: (_) => ProductsProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_)=>CartProvider(),
+        ),
       ],
       child: Consumer<DarkThemeProvider>(builder: (context, themData, child) {
         return MaterialApp(
