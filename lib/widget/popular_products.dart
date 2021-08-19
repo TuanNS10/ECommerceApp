@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
 import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
+import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -13,6 +14,7 @@ class PopularProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     final productsAttributes = Provider.of<Product>(context);
     final cartProvider = Provider.of<CartProvider>(context);
+    final favProvider = Provider.of<FavsProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -47,7 +49,11 @@ class PopularProducts extends StatelessWidget {
                     Positioned(
                         right: 10,
                         top: 8,
-                        child: Icon(Entypo.star, color: Colors.grey.shade800)),
+                        child: Icon(Entypo.star,
+                            color: favProvider.getFavsItems
+                                    .containsKey(productsAttributes.id)
+                                ? Colors.red
+                                : Colors.grey.shade800)),
                     Positioned(
                       right: 10,
                       top: 8,
@@ -113,15 +119,15 @@ class PopularProducts extends StatelessWidget {
                                         productsAttributes.imageUrl);
                                   },
                                   borderRadius: BorderRadius.circular(30.0),
-                                    child: Icon(
-                                      cartProvider.getCartItems.containsKey(
-                                              productsAttributes.id)
-                                          ? MaterialCommunityIcons.check_all
-                                          : MaterialCommunityIcons.cart_plus,
-                                      size: 25,
-                                      color: Colors.grey,
-                                    ),
+                                  child: Icon(
+                                    cartProvider.getCartItems
+                                            .containsKey(productsAttributes.id)
+                                        ? MaterialCommunityIcons.check_all
+                                        : MaterialCommunityIcons.cart_plus,
+                                    size: 25,
+                                    color: Colors.grey,
                                   ),
+                                ),
                               ),
                             ),
                           )

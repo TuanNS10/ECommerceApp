@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/provider/cart_provider.dart';
+import 'package:ecommerce_app/services/global_method.dart';
 import 'package:ecommerce_app/widget/cart_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider=Provider.of<CartProvider>(context);
+    GlobalMethods globalMethods = GlobalMethods();
+    final cartProvider = Provider.of<CartProvider>(context);
     return cartProvider.getCartItems.isEmpty
         ? Scaffold(body: CartEmpty())
         : Scaffold(
@@ -20,7 +22,13 @@ class CartScreen extends StatelessWidget {
               title: Text('Cart (${cartProvider.getCartItems.length})'),
               actions: [
                 IconButton(
-                  onPressed: () {cartProvider.clearCart();},
+                  onPressed: () {
+                    globalMethods.showDialogg(
+                        'Clear cart',
+                        'Your cart will be cleared !',
+                        () => cartProvider.clearCart(),
+                        context);
+                  },
                   icon: Icon(Icons.delete),
                 )
               ],
@@ -34,7 +42,8 @@ class CartScreen extends StatelessWidget {
                     return ChangeNotifierProvider.value(
                       value: cartProvider.getCartItems.values.toList()[index],
                       child: CartFull(
-                        productId: cartProvider.getCartItems.keys.toList()[index],
+                        productId:
+                            cartProvider.getCartItems.keys.toList()[index],
                       ),
                     );
                   }),

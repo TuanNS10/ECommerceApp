@@ -3,6 +3,7 @@ import 'package:ecommerce_app/inner_screens/product_detail.dart';
 import 'package:ecommerce_app/models/cart_attr.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/services/global_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -20,6 +21,7 @@ class CartFull extends StatefulWidget {
 class _CartFullState extends State<CartFull> {
   @override
   Widget build(BuildContext context) {
+    GlobalMethods globalMethods=GlobalMethods();
     final themeChange = Provider.of<DarkThemeProvider>(context);
     final cartAttr = Provider.of<CartAttrModel>(context);
     final cartProvider = Provider.of<CartProvider>(context);
@@ -29,7 +31,7 @@ class _CartFullState extends State<CartFull> {
           arguments: widget.productId),
       child: Container(
         height: 135,
-        margin: const EdgeInsets.all(0.5),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             bottomRight: const Radius.circular(16.0),
@@ -69,7 +71,10 @@ class _CartFullState extends State<CartFull> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(32.0),
                             onTap: () {
-                              cartProvider.removeItem(widget.productId);
+                                globalMethods.showDialogg('Remove item',
+                                    'Product will be remove from the cart !',
+                                    ()=> cartProvider.removeItem(widget.productId),
+                                    context);
                             },
                             child: Container(
                               height: 50,

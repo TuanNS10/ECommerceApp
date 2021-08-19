@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class CartEmpty extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.width * 0.09,
           child: RaisedButton(
-            onPressed: () {},
+            onPressed: () {Navigator.of(context).pushNamed(FeedsScreen.routeName);},
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(color: Colors.red),
