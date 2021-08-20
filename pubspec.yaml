@@ -76,6 +76,7 @@ flutter:
     - assets/images/CatShoes.jpg
     - assets/images/CatWatchs.jpg
     - assets/images/CatBeauty.jpg
+    - assets/images/cute.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
