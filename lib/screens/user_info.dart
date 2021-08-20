@@ -70,8 +70,8 @@ class _UserScreenState extends State<UserScreen> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-1/s320x320/120499204_1269155846758366_7760179291059864084_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=7206a8&_nc_ohc=KO2gTJ8LBxUAX_UsMdA&_nc_ht=scontent-hkg4-1.xx&oh=c5a4cb3f939e735e309cf7ced3746f19&oe=61330F5E'))),
+                                    image: AssetImage('assets/images/cute.jpg')
+                                )),
                           ),
                           SizedBox(
                             width: 12,
@@ -85,8 +85,7 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     background: Image(
-                      image: NetworkImage(
-                          'https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-1/s320x320/120499204_1269155846758366_7760179291059864084_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=7206a8&_nc_ohc=KO2gTJ8LBxUAX_UsMdA&_nc_ht=scontent-hkg4-1.xx&oh=c5a4cb3f939e735e309cf7ced3746f19&oe=61330F5E'),
+                      image: AssetImage('assets/images/cute.jpg'),
                       fit: BoxFit.fill,
                     ),
                   ),
