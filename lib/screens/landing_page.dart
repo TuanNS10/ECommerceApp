@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/screens/auth/login.dart';
+import 'package:ecommerce_app/screens/auth/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
@@ -101,7 +103,7 @@ class _LandingPageState extends State<LandingPage>
                                     side: BorderSide(
                                         color: ColorsConsts.backgroundColor))),
                       ),
-                      onPressed: () {},
+                      onPressed: () {Navigator.pushNamed(context, LoginScreen.routeName);},
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -131,7 +133,7 @@ class _LandingPageState extends State<LandingPage>
                                       side: BorderSide(
                                           color:
                                               ColorsConsts.backgroundColor)))),
-                      onPressed: () {},
+                      onPressed: () {Navigator.pushNamed(context, SignupScreen.routeName);},
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
