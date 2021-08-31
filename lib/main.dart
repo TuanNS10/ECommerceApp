@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
+import 'package:ecommerce_app/inner_screens/upload_product_form.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
@@ -12,6 +13,7 @@ import 'package:ecommerce_app/provider/dark_theme_provider.dart';
 import 'package:ecommerce_app/screens/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/landing_page.dart';
+import 'package:ecommerce_app/screens/main_screen.dart';
 import 'package:ecommerce_app/screens/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(
           title: 'ECommerce App',
           theme: Styles.themData(themeChangeProvider.darkTheme, context),
-          home: LandingPage(),
+          home: MainScreen(),
           //initialRoute: '/',
           routes: {
             BrandNavigationRailScreen.routeName: (ctx)=>
@@ -79,6 +81,10 @@ class _MyAppState extends State<MyApp> {
                 LoginScreen(),
             SignupScreen.routeName: (ctx) =>
                 SignupScreen(),
+            BottomBarScreen.routeName: (ctx) =>
+                BottomBarScreen(),
+            UploadProductForm.routeName: (ctx) =>
+                UploadProductForm(),
           },
         );
       }),

@@ -175,7 +175,7 @@ class _UserScreenState extends State<UserScreen> {
                     child: InkWell(
                       splashColor: Theme.of(context).splashColor,
                       child: ListTile(
-                        onTap: () async {
+                        onTap: () async { Navigator.canPop(context)? Navigator.pop(context):
                           showDialog(
                               context: context,
                               builder: (BuildContext ctx) {
