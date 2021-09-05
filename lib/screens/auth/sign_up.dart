@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/services/global_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
   static const routeName = '/SignupScreen';
@@ -28,6 +30,9 @@ class _SignupScreenState extends State<SignupScreen> {
   late int _phoneNumber;
   File? _pickedImage;
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GlobalMethods _globalMethods=GlobalMethods();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -37,11 +42,27 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitForm() async{
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
     if (isValid) {
+      setState(() {
+        _isLoading=true;
+      });
       _formKey.currentState!.save();
+      try{
+        await _auth.createUserWithEmailAndPassword(
+            email: _emailAddress.toLowerCase().trim(),
+            password: _password.trim());
+      }
+      catch(error){
+       _globalMethods.authErrorHandle(error.toString(), context);
+        print('Error occurred $error');
+      }finally{
+        setState(() {
+          _isLoading=false;
+        });
+      }
     }
   }
 
@@ -78,6 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
+            /*******Region wave *********/
             Container(
               height: MediaQuery.of(context).size.height * 0.95,
               child: RotatedBox(
@@ -112,8 +134,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(height: 30),
                 Stack(
                   children: [
+                    /*****Region Image avatar**********/
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 30, horizontal: 30),
                       child: CircleAvatar(
                         radius: 71,
                         backgroundColor: ColorsConsts.gradiendLEnd,
@@ -126,6 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
+                    /******Region process upload image************/
                     Positioned(
                         top: 120,
                         left: 110,
@@ -166,8 +191,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   'Camera',
                                                   style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: ColorsConsts.title),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color:
+                                                          ColorsConsts.title),
                                                 )
                                               ],
                                             ),
@@ -189,8 +216,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   'Gallery',
                                                   style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: ColorsConsts.title),
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      color:
+                                                          ColorsConsts.title),
                                                 )
                                               ],
                                             ),
@@ -212,7 +241,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   'Remove',
                                                   style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       color: Colors.red),
                                                 )
                                               ],
@@ -227,6 +257,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ))
                   ],
                 ),
+                /*****TextFiled Register*******/
                 Form(
                     key: _formKey,
                     child: Column(
@@ -294,7 +325,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               return null;
                             },
                             textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.visiblePassword,
                             decoration: InputDecoration(
                                 border: const UnderlineInputBorder(),
                                 filled: true,
@@ -350,7 +381,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             SizedBox(
                               height: 10,
                             ),
-                            ElevatedButton(
+                            _isLoading? CircularProgressIndicator(): ElevatedButton(
                               style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
