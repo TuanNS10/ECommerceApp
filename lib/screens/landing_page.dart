@@ -1,10 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/screens/auth/login.dart';
 import 'package:ecommerce_app/screens/auth/sign_up.dart';
 import 'package:ecommerce_app/screens/bottom_bar.dart';
+import 'package:ecommerce_app/services/global_method.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -22,6 +26,9 @@ class _LandingPageState extends State<LandingPage>
     'https://thumbor.forbes.com/thumbor/fit-in/1200x0/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1138257321%2F0x0.jpg%3Ffit%3Dscale',
     'https://e-shopy.org/wp-content/uploads/2020/08/shop.jpeg',
   ];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GlobalMethods _globalMethods = GlobalMethods();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -47,6 +54,55 @@ class _LandingPageState extends State<LandingPage>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _loginAnonymously() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      await _auth.signInAnonymously();
+    } catch (error) {
+      _globalMethods.authErrorHandle(error.toString(), context);
+      print('Error $error');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _googleSignIn() async {
+    final googleSignIn = GoogleSignIn();
+    final googleAccount = await googleSignIn.signIn();
+    if (googleAccount != null) {
+      final googleAuth = await googleAccount.authentication;
+      if (googleAuth.accessToken != null && googleAuth.idToken != null) {
+        try {
+          var date= DateTime.now().toString();
+          var dateParse=DateTime.parse(date);
+          var formattedDate= '${dateParse.day} - ${dateParse.month} - ${dateParse.year}';
+          final authResult = await _auth.signInWithCredential(
+              GoogleAuthProvider.credential(
+                  idToken: googleAuth.idToken,
+                  accessToken: googleAuth.accessToken));
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(authResult.user!.uid)
+              .set({
+            'id': authResult.user!.uid,
+            'name': authResult.user!.displayName,
+            'email': authResult.user!.email,
+            'phoneNumber': authResult.user!.phoneNumber,
+            'imageUrl': authResult.user!.photoURL,
+            'joinedAt': formattedDate,
+            'createdAt': Timestamp.now(),
+          });
+        } catch (error) {
+          _globalMethods.authErrorHandle(error.toString(), context);
+        }
+      }
+    }
   }
 
   @override
@@ -104,7 +160,9 @@ class _LandingPageState extends State<LandingPage>
                                     side: BorderSide(
                                         color: ColorsConsts.backgroundColor))),
                       ),
-                      onPressed: () {Navigator.pushNamed(context, LoginScreen.routeName);},
+                      onPressed: () {
+                        Navigator.pushNamed(context, LoginScreen.routeName);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -134,7 +192,9 @@ class _LandingPageState extends State<LandingPage>
                                       side: BorderSide(
                                           color:
                                               ColorsConsts.backgroundColor)))),
-                      onPressed: () {Navigator.pushNamed(context, SignupScreen.routeName);},
+                      onPressed: () {
+                        Navigator.pushNamed(context, SignupScreen.routeName);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -194,14 +254,19 @@ class _LandingPageState extends State<LandingPage>
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   OutlineButton(
-                    onPressed: () {},
+                    onPressed: _googleSignIn,
                     shape: StadiumBorder(),
                     highlightedBorderColor: Colors.red.shade200,
                     borderSide: BorderSide(width: 2, color: Colors.red),
                     child: Text('Google +'),
                   ),
-                  OutlineButton(
-                    onPressed: () {Navigator.pushNamed(context, BottomBarScreen.routeName);},
+                  _isLoading
+                      ? CircularProgressIndicator()
+                      : OutlineButton(
+                    onPressed: () {
+                      _loginAnonymously();
+                      //Navigator.pushNamed(context, BottomBarScreen.routeName);
+                    },
                     shape: StadiumBorder(),
                     highlightedBorderColor: Colors.deepPurple.shade200,
                     borderSide: BorderSide(width: 2, color: Colors.deepPurple),

@@ -4,11 +4,14 @@ import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/services/global_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SignupScreen extends StatefulWidget {
   static const routeName = '/SignupScreen';
@@ -29,9 +32,10 @@ class _SignupScreenState extends State<SignupScreen> {
   String _password = '';
   late int _phoneNumber;
   File? _pickedImage;
+  String url = '';
   final _formKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  GlobalMethods _globalMethods=GlobalMethods();
+  GlobalMethods _globalMethods = GlobalMethods();
   bool _isLoading = false;
 
   @override
@@ -42,25 +46,50 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _submitForm() async{
+  void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
+    var date = DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formatDate = '${dateParse.day} - ${dateParse.month} - ${dateParse.year}';
     if (isValid) {
       setState(() {
-        _isLoading=true;
+        _isLoading = true;
       });
       _formKey.currentState!.save();
-      try{
-        await _auth.createUserWithEmailAndPassword(
-            email: _emailAddress.toLowerCase().trim(),
-            password: _password.trim());
-      }
-      catch(error){
-       _globalMethods.authErrorHandle(error.toString(), context);
+      try {
+        if (_pickedImage == null) {
+          _globalMethods.authErrorHandle('Please pick an image', context);
+        } else {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('usersImages')
+              .child(_fullName + '.jpg');
+          await ref.putFile(_pickedImage!);
+          url = await ref.getDownloadURL();
+
+          await _auth.createUserWithEmailAndPassword(
+              email: _emailAddress.toLowerCase().trim(),
+              password: _password.trim());
+          final User? user = _auth.currentUser;
+          final _uid = user!.uid;
+          await FirebaseFirestore.instance.collection('users').doc(_uid).set({
+            'id': _uid,
+            'name': _fullName,
+            'email': _emailAddress,
+            'phoneNumber': _phoneNumber,
+            'imageUrl': url,
+            'joinedAt': formatDate,
+            'createAt': Timestamp.now(),
+          });
+        }
+        Navigator.canPop(context)? Navigator.pop(context): null;
+      } catch (error) {
+        _globalMethods.authErrorHandle(error.toString(), context);
         print('Error occurred $error');
-      }finally{
+      } finally {
         setState(() {
-          _isLoading=false;
+          _isLoading = false;
         });
       }
     }
@@ -361,6 +390,9 @@ class _SignupScreenState extends State<SignupScreen> {
                               }
                               return null;
                             },
+                            inputFormatters:[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             textInputAction: TextInputAction.next,
                             onEditingComplete: _submitForm,
                             keyboardType: TextInputType.phone,
@@ -381,37 +413,39 @@ class _SignupScreenState extends State<SignupScreen> {
                             SizedBox(
                               height: 10,
                             ),
-                            _isLoading? CircularProgressIndicator(): ElevatedButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0),
-                                          side: BorderSide(
-                                              color: ColorsConsts
-                                                  .backgroundColor)))),
-                              onPressed: () {
-                                _submitForm();
-                              },
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Sign up',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500),
+                            _isLoading
+                                ? CircularProgressIndicator()
+                                : ElevatedButton(
+                                    style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                                side: BorderSide(
+                                                    color: ColorsConsts
+                                                        .backgroundColor)))),
+                                    onPressed: () {
+                                      _submitForm();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Sign up',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          Feather.user_plus,
+                                          size: 18,
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    Feather.user_plus,
-                                    size: 18,
-                                  )
-                                ],
-                              ),
-                            ),
                             SizedBox(
                               width: 20,
                             )

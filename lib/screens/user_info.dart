@@ -1,5 +1,9 @@
+import 'dart:core';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
 import 'package:ecommerce_app/screens/wishlist.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -12,9 +16,15 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
-
   late ScrollController _scrollController;
   var top = 0.0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _uid;
+  String? _name;
+  String? _email;
+  String? _joinedAt;
+  String? _userImageUrl;
+  int? _phoneNumber;
 
   @override
   void initState() {
@@ -23,6 +33,28 @@ class _UserScreenState extends State<UserScreen> {
     _scrollController.addListener(() {
       setState(() {});
     });
+    getData();
+  }
+
+  void getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
+    print('displayName ${user.email}');
+
+    final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
+        ? null
+        :await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if(userDoc == null){
+      return;
+    }else{
+      setState(() {
+        _name = userDoc.get('name');
+        _email = userDoc.get('email');
+        _phoneNumber = userDoc.get('phoneNumber');
+        _joinedAt = userDoc.get('joinedAt');
+        _userImageUrl = userDoc.get('imageUrl');
+      });
+    }
   }
 
   @override
@@ -70,14 +102,16 @@ class _UserScreenState extends State<UserScreen> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: AssetImage('assets/images/cute.jpg')
+                                    image: _userImageUrl == null
+                                        ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                        : NetworkImage(_userImageUrl!)
                                 )),
                           ),
                           SizedBox(
                             width: 12,
                           ),
                           Text(
-                            'Guest',
+                             _name == null ? 'Guest': _name!,
                             style:
                                 TextStyle(fontSize: 20.0, color: Colors.white),
                           )
@@ -85,7 +119,10 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     background: Image(
-                      image: AssetImage('assets/images/cute.jpg'),
+                      image: _userImageUrl == null
+                          ? AssetImage('assets/images/cute.jpg')
+                              as ImageProvider
+                          : NetworkImage(_userImageUrl!),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -145,10 +182,11 @@ class _UserScreenState extends State<UserScreen> {
                     thickness: 1,
                     color: Colors.grey,
                   ),
-                  userListTile('Email', 'Email here', 0, context),
-                  userListTile('Phone number', '_phoneNumber', 1, context),
+                  userListTile('Email', _email ?? '', 0, context),
+                  userListTile(
+                      'Phone number',  _phoneNumber.toString() ?? '', 1, context),
                   userListTile('Shipping address', '', 2, context),
-                  userListTile('joined date', '20.2.2021', 3, context),
+                  userListTile('joined date', _joinedAt ?? '', 3, context),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: userTitle(title: 'User setting'),
@@ -175,44 +213,51 @@ class _UserScreenState extends State<UserScreen> {
                     child: InkWell(
                       splashColor: Theme.of(context).splashColor,
                       child: ListTile(
-                        onTap: () async { Navigator.canPop(context)? Navigator.pop(context):
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext ctx) {
-                                return AlertDialog(
-                                  title: Row(
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 6.0),
-                                        child: Image.network(
-                                          'https://image.flaticon.com/icons/png/128/1828/1828304.png',
-                                          height: 20,
-                                          width: 20,
-                                        ),
+                        onTap: () async {
+                          Navigator.canPop(context)
+                              ? Navigator.pop(context)
+                              : showDialog(
+                                  context: context,
+                                  builder: (BuildContext ctx) {
+                                    return AlertDialog(
+                                      title: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 6.0),
+                                            child: Image.network(
+                                              'https://image.flaticon.com/icons/png/128/1828/1828304.png',
+                                              height: 20,
+                                              width: 20,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text('Sign out'),
+                                          )
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('Sign out'),
-                                      )
-                                    ],
-                                  ),
-                                  content: Text('Do you wanna Sign out?'),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () async {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Cancel')),
-                                    TextButton(
-                                        onPressed: () async {},
-                                        child: Text(
-                                          'OK',
-                                          style: TextStyle(color: Colors.red),
-                                        ))
-                                  ],
-                                );
-                              });
+                                      content: Text('Do you wanna Sign out?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () async {
+                                              await _auth.signOut().then(
+                                                  (value) =>
+                                                      Navigator.pop(context));
+                                            },
+                                            child: Text(
+                                              'OK',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ))
+                                      ],
+                                    );
+                                  });
                         },
                         title: Text('Logout'),
                         leading: Icon(Icons.exit_to_app_rounded),
