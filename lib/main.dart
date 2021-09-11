@@ -1,7 +1,8 @@
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
-import 'package:ecommerce_app/inner_screens/upload_product_form.dart';
+import 'package:ecommerce_app/screens/auth/forget_password.dart';
+import 'package:ecommerce_app/screens/upload_product_form.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
@@ -108,6 +109,8 @@ class _MyAppState extends State<MyApp> {
                     BottomBarScreen(),
                 UploadProductForm.routeName: (ctx) =>
                     UploadProductForm(),
+                ForgetPassword.routeName: (ctx) =>
+                    ForgetPassword(),
               },
             );
           }),

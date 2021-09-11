@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/screens/auth/forget_password.dart';
 import 'package:ecommerce_app/services/global_method.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -175,6 +176,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             obscureText: _obscureText,
                             onEditingComplete: _submitForm,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+                            child: TextButton(onPressed: (){Navigator.pushNamed(context, ForgetPassword.routeName);},
+                                child: Text('Quên mật khẩu',
+                                style: TextStyle(
+                                  color: Colors.blue.shade900,
+                                  decoration: TextDecoration.underline,
+                                ),)),
                           ),
                         ),
                         Row(
