@@ -16,7 +16,7 @@ class CategoriesFeedsScreen extends StatelessWidget {
     return Scaffold(
       body: GridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 220 / 360,
+          childAspectRatio: 220 / 440,
           crossAxisSpacing: 6,
           mainAxisSpacing: 6,
           children: List.generate(productsList.length, (index) {

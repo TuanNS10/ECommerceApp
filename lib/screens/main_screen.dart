@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/inner_screens/upload_product_form.dart';
+import 'package:ecommerce_app/screens/upload_product_form.dart';
 import 'package:ecommerce_app/screens/bottom_bar.dart';
 import 'package:flutter/material.dart';
 

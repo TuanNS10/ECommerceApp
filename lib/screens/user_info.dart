@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/screens/carts.dart';
 import 'package:ecommerce_app/screens/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -160,7 +161,9 @@ class _UserScreenState extends State<UserScreen> {
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pushNamed(CartScreen.routeName);
+                      },
                       splashColor: Colors.red,
                       child: ListTile(
                         title: Text('Cart'),

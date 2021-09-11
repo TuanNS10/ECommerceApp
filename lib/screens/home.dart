@@ -39,6 +39,7 @@ class _HomeState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
+    productsData.FetchProducts();
     final popularItems = productsData.popularProducts;
     return Scaffold(
       body: BackdropScaffold(

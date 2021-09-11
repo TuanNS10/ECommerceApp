@@ -26,7 +26,7 @@ class FeedsScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        //backgroundColor: Theme.of(context).cardColor,
+        backgroundColor: Theme.of(context).cardColor,
         title: Text('Feeds'),
         actions: [
           Consumer<FavsProvider>(
@@ -66,7 +66,7 @@ class FeedsScreen extends StatelessWidget {
       ),
       body: GridView.count(
           crossAxisCount: 2,
-          childAspectRatio: 220 / 360,
+          childAspectRatio: 220 / 420,
           crossAxisSpacing: 6,
           mainAxisSpacing: 6,
           children: List.generate(productsList.length, (index) {

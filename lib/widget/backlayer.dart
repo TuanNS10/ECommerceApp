@@ -1,6 +1,6 @@
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
-import 'package:ecommerce_app/inner_screens/upload_product_form.dart';
+import 'package:ecommerce_app/screens/upload_product_form.dart';
 import 'package:ecommerce_app/screens/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/wishlist.dart';

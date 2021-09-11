@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/services/global_method.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -8,6 +12,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class UploadProductForm extends StatefulWidget {
   static const routeName = '/UploadProductForm';
@@ -21,6 +26,8 @@ class UploadProductForm extends StatefulWidget {
 class _UploadProductFormState extends State<UploadProductForm> {
   //declare variable
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GlobalMethods _globalMethods = GlobalMethods();
 
   var _productTitle = '';
   var _productPrice = '';
@@ -34,6 +41,9 @@ class _UploadProductFormState extends State<UploadProductForm> {
   String? _categoryValue;
   String? _brandValue;
   File? _pickedImage;
+  String? url;
+  bool _isLoading = false;
+  var uuid = Uuid();
 
   //function show alert the dialog
   showAlertDialog(BuildContext context, String title, String body) {
@@ -54,7 +64,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
         });
   }
 
-  void _trySubmit() {
+  /// *******Function process Upload************************/
+  void _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
@@ -66,6 +77,50 @@ class _UploadProductFormState extends State<UploadProductForm> {
       print(_productBrand);
       print(_productDescription);
       print(_productQuantity);
+    }
+    if (isValid) {
+      _formKey.currentState!.save();
+      try {
+        if (_pickedImage == null) {
+          _globalMethods.authErrorHandle('Please pick an image', context);
+        } else {
+          setState(() {
+            _isLoading = true;
+          });
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('productsImages')
+              .child(_productTitle + '.jpg');
+          await ref.putFile(_pickedImage!);
+          url = await ref.getDownloadURL();
+
+          final User? user = _auth.currentUser;
+          final _uid = user!.uid;
+          final productId = uuid.v4();
+          await FirebaseFirestore.instance
+              .collection('products')
+              .doc(productId)
+              .set({
+            'productId': productId,
+            'productTitle': _productTitle,
+            'price': _productPrice,
+            'productImage': url,
+            'productCategory': _productCategory,
+            'productBrand': _productBrand,
+            'productDescription': _productDescription,
+            'productQuantity': _productQuantity,
+            'userId': _uid,
+            'createdAt': Timestamp.now(),
+          });
+          Navigator.canPop(context) ? Navigator.pop(context) : null;
+        }
+      } catch (error) {
+        _globalMethods.authErrorHandle(error.toString(), context);
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -117,11 +172,18 @@ class _UploadProductFormState extends State<UploadProductForm> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: _isLoading
+                      ? Center(
+                          child: Container(
+                          height: 40,
+                          width: 40,
+                          child: CircularProgressIndicator(),
+                        ))
+                      : Text(
+                          'Upload',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
                 ),
                 GradientIcon(
                     Feather.upload,
@@ -494,7 +556,9 @@ class _UploadProductFormState extends State<UploadProductForm> {
                 ),
               ),
             ),
-            SizedBox(height: 50,)
+            SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
