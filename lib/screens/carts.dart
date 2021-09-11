@@ -1,13 +1,37 @@
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/services/global_method.dart';
+import 'package:ecommerce_app/services/payment.dart';
 import 'package:ecommerce_app/widget/cart_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/widget/cart_full.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/CartScreen';
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState(){
+    super.initState();
+    StripeService.init();
+  }
+
+  void payWithCard({required int amount}) async{
+    ProgressDialog dialog=ProgressDialog(context);
+    dialog.style(message: 'Please wait...');
+    await dialog.show();
+    var response = await StripeService.payWithNewCard(amount: amount.toString(), currency: 'USD');
+    print('response: ${response.message}');
+    Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(response.message.toString()),
+    duration: Duration(microseconds: response.success == true ?1200: 3000,)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +92,11 @@ class CartScreen extends StatelessWidget {
                 color: Colors.red,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(30),
-                  onTap: () {},
+                  onTap: () {
+                    double amountInCents = subTotal * 1000;
+                    int integerAmount = (amountInCents / 10).ceil();
+                    payWithCard(amount: integerAmount);
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
