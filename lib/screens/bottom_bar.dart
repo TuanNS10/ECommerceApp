@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/consts/my_icons.dart';
-import 'package:ecommerce_app/screens/carts.dart';
+import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/home.dart';
 import 'package:ecommerce_app/screens/search.dart';

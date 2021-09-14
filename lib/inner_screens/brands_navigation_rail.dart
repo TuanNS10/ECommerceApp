@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/inner_screens/brands_rail_widget.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
-
 
 class BrandNavigationRailScreen extends StatefulWidget {
   BrandNavigationRailScreen({Key? key}) : super(key: key);
@@ -21,10 +23,35 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
   late String routeArgs;
   late String brand;
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _userImageUrl;
+  String? _uid;
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
+
+  void getData() async{
+    User? user=_auth.currentUser;
+    _uid=user!.uid;
+
+    final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
+        ? null
+        : await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc == null) {
+      return;
+    } else {
+      setState(() {
+        _userImageUrl = userDoc.get('imageUrl');
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     routeArgs = ModalRoute.of(context)!.settings.arguments.toString();
-    _selectedIndex = int.parse(routeArgs.substring(1,2));
+    _selectedIndex = int.parse(routeArgs.substring(1, 2));
     print(routeArgs.toString());
     print(_selectedIndex);
     if (_selectedIndex == 0) {
@@ -69,6 +96,7 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
     }
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,8 +166,9 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
                         Center(
                           child: CircleAvatar(
                             radius: 16,
-                            backgroundImage: NetworkImage(
-                                'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                            backgroundImage: _userImageUrl == null
+                                ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                :NetworkImage(_userImageUrl!),
                           ),
                         ),
                         SizedBox(
@@ -200,14 +229,14 @@ class ContentSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsData=Provider.of<ProductsProvider>(context);
-    final productsBrand=productsData.findByBrand(brand);
-    if(brand=='All'){
-      for(int i=0;i < productsData.products.length;i++){
+    final productsData = Provider.of<ProductsProvider>(context);
+    final productsBrand = productsData.findByBrand(brand);
+    if (brand == 'All') {
+      for (int i = 0; i < productsData.products.length; i++) {
         productsBrand.add(productsData.products[i]);
       }
     }
-    print('productsBrand ${productsBrand[0].imageUrl}');
+    //print('productsBrand ${productsBrand[0].imageUrl}');
     print('brand $brand');
     return Expanded(
         child: Padding(
@@ -215,14 +244,27 @@ class ContentSpace extends StatelessWidget {
       child: MediaQuery.removePadding(
           context: context,
           removeTop: true,
-          child: ListView.builder(
-            itemCount: productsBrand.length,
-            itemBuilder: (BuildContext context, int index) =>
-                ChangeNotifierProvider.value(
-                  value: productsBrand[index],
-                  child: BrandsNavigationRail(),
-                )
-          )),
+          child: productsBrand.isEmpty
+              ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Feather.database, size: 80,),
+                  SizedBox(height: 40,),
+                  Text(
+                      'No products related to this brand',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    ),
+                ],
+              )
+              : ListView.builder(
+                  itemCount: productsBrand.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      ChangeNotifierProvider.value(
+                        value: productsBrand[index],
+                        child: BrandsNavigationRail(),
+                      ))),
     ));
   }
 }

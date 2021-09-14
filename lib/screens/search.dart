@@ -133,7 +133,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           crossAxisCount: 2,
-                          childAspectRatio: 240 / 420,
+                          childAspectRatio: 220 / 420,
                           crossAxisSpacing: 8,
                           mainAxisSpacing: 8,
                           children: List.generate(

@@ -230,7 +230,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                       }
                                       return null;
                                     },
-                                    keyboardType: TextInputType.emailAddress,
+                                      textCapitalization: TextCapitalization.sentences,
+                                    //keyboardType: TextInputType.multiline,
                                     decoration: InputDecoration(
                                         labelText: 'Product Title'),
                                     onSaved: (value) {
@@ -460,8 +461,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
                             DropdownButton(
                               items: [
                                 DropdownMenuItem<String>(
-                                  child: Text('Addidas'),
-                                  value: 'Addidas',
+                                  child: Text('Adidas'),
+                                  value: 'Adidas',
                                 ),
                                 DropdownMenuItem<String>(
                                   child: Text('Apple'),

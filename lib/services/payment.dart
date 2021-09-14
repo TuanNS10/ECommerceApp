@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:stripe_payment/stripe_payment.dart';
 
 class StripeTransactionResponse {
-  String? message;
-  bool? success;
-  StripeTransactionResponse({this.message, this.success});
+  String message;
+  bool success;
+  StripeTransactionResponse({required this.message, required this.success});
 }
 
 class StripeService {
@@ -39,7 +38,7 @@ class StripeService {
       await http.post(paymentApiUri, headers: headers, body: body);
       return jsonDecode(response.body);
     } catch (error) {
-      print('error occured in the payment intent $error ');
+      print('error occurred in the payment intent $error ');
     }
     return null;
   }
@@ -48,7 +47,7 @@ class StripeService {
       {required String amount, required String currency}) async {
     try {
       var paymentMethod = await StripePayment.paymentRequestWithCardForm(
-        CardFormPaymentRequest());
+          CardFormPaymentRequest());
       var paymentIntent =
       await StripeService.createPaymentIntent(amount, currency);
       var response = await StripePayment.confirmPaymentIntent(PaymentIntent(

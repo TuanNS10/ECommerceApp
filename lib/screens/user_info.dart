@@ -2,8 +2,9 @@ import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
-import 'package:ecommerce_app/screens/carts.dart';
-import 'package:ecommerce_app/screens/wishlist.dart';
+import 'package:ecommerce_app/screens/cart/carts.dart';
+import 'package:ecommerce_app/screens/orders/order.dart';
+import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _UserScreenState extends State<UserScreen> {
   String? _email;
   String? _joinedAt;
   String? _userImageUrl;
-  int? _phoneNumber;
+  String? _phoneNumber;
 
   @override
   void initState() {
@@ -44,10 +45,10 @@ class _UserScreenState extends State<UserScreen> {
 
     final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
         ? null
-        :await FirebaseFirestore.instance.collection('users').doc(_uid).get();
-    if(userDoc == null){
+        : await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc == null) {
       return;
-    }else{
+    } else {
       setState(() {
         _name = userDoc.get('name');
         _email = userDoc.get('email');
@@ -104,15 +105,15 @@ class _UserScreenState extends State<UserScreen> {
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: _userImageUrl == null
-                                        ? AssetImage('assets/images/cute.jpg') as ImageProvider
-                                        : NetworkImage(_userImageUrl!)
-                                )),
+                                        ? AssetImage('assets/images/cute.jpg')
+                                            as ImageProvider
+                                        : NetworkImage(_userImageUrl!))),
                           ),
                           SizedBox(
                             width: 12,
                           ),
                           Text(
-                             _name == null ? 'Guest': _name!,
+                            _name == null ? 'Guest' : _name!,
                             style:
                                 TextStyle(fontSize: 20.0, color: Colors.white),
                           )
@@ -172,10 +173,18 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                   ),
-                  ListTile(
-                    title: Text('My Orders'),
-                    trailing: Icon(Icons.chevron_right_rounded),
-                    leading: Icon(Feather.shopping_bag),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(OrderScreen.routeName);
+                      },
+                      child: ListTile(
+                        title: Text('My Orders'),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        leading: Icon(Feather.shopping_bag),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
@@ -186,10 +195,10 @@ class _UserScreenState extends State<UserScreen> {
                     color: Colors.grey,
                   ),
                   userListTile('Email', _email ?? '', 0, context),
-                  userListTile(
-                      'Phone number',  _phoneNumber.toString() ?? '', 1, context),
+                  userListTile('Phone number', _phoneNumber ?? '', 1,
+                      context),
                   userListTile('Shipping address', '', 2, context),
-                  userListTile('joined date', _joinedAt ?? '', 3, context),
+                  userListTile('Joined date', _joinedAt ?? '', 3, context),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: userTitle(title: 'User setting'),
@@ -272,7 +281,7 @@ class _UserScreenState extends State<UserScreen> {
             )
           ],
         ),
-        _buildFab()
+        //_buildFab()
       ],
     ));
   }

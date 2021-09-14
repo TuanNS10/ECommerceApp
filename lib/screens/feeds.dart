@@ -5,15 +5,23 @@ import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
-import 'package:ecommerce_app/screens/carts.dart';
-import 'package:ecommerce_app/screens/wishlist.dart';
+import 'package:ecommerce_app/screens/cart/carts.dart';
+import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
 import 'package:ecommerce_app/widget/feeds_products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FeedsScreen extends StatelessWidget {
+class FeedsScreen extends StatefulWidget {
   static const routeName = '/Feeds';
 
+  @override
+  _FeedsScreenState createState() => _FeedsScreenState();
+}
+
+class _FeedsScreenState extends State<FeedsScreen> {
+  Future<void> _getProductsOnRefresh() async {
+    await Provider.of<ProductsProvider>(context, listen: false).FetchProducts();
+  }
   @override
   Widget build(BuildContext context) {
     final popular = ModalRoute.of(context)!.settings.arguments as String;
@@ -64,17 +72,20 @@ class FeedsScreen extends StatelessWidget {
               ))
         ],
       ),
-      body: GridView.count(
-          crossAxisCount: 2,
-          childAspectRatio: 220 / 420,
-          crossAxisSpacing: 6,
-          mainAxisSpacing: 6,
-          children: List.generate(productsList.length, (index) {
-            return ChangeNotifierProvider.value(
-              value: productsList[index],
-              child: FeedsProducts(),
-            );
-          })),
+      body: RefreshIndicator(
+        onRefresh: _getProductsOnRefresh,
+        child: GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: 220 / 420,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+            children: List.generate(productsList.length, (index) {
+              return ChangeNotifierProvider.value(
+                value: productsList[index],
+                child: FeedsProducts(),
+              );
+            })),
+      ),
     );
   }
 }

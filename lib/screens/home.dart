@@ -1,11 +1,13 @@
 import 'package:backdrop/backdrop.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
 import 'package:ecommerce_app/widget/backlayer.dart';
 import 'package:ecommerce_app/widget/category.dart';
 import 'package:ecommerce_app/widget/popular_products.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -36,6 +38,32 @@ class _HomeState extends State<HomeScreen> {
     'assets/images/huawei.jpg',
   ];
 
+  FirebaseAuth _auth= FirebaseAuth.instance;
+  String? _userImageUrl;
+  String? _uid;
+
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
+
+  void getData() async{
+    User? user= _auth.currentUser;
+    _uid=user!.uid;
+
+    final DocumentSnapshot<Map<String,dynamic>>? userDoc= user.isAnonymous
+    ? null
+        :await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if(userDoc == null)
+      return;
+    else{
+      setState(() {
+        _userImageUrl=userDoc.get('imageUrl');
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
@@ -64,8 +92,9 @@ class _HomeState extends State<HomeScreen> {
                 backgroundColor: Colors.white,
                 child: CircleAvatar(
                   radius: 13,
-                  backgroundImage: NetworkImage(
-                      'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                  backgroundImage: _userImageUrl == null
+                    ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                    : NetworkImage(_userImageUrl!),
                 ),
               ),
               onPressed: () {},

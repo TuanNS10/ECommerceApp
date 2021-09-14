@@ -1,7 +1,9 @@
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
+import 'package:ecommerce_app/provider/orders_provider.dart';
 import 'package:ecommerce_app/screens/auth/forget_password.dart';
+import 'package:ecommerce_app/screens/orders/order.dart';
 import 'package:ecommerce_app/screens/upload_product_form.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
@@ -11,15 +13,15 @@ import 'package:ecommerce_app/screens/auth/sign_up.dart';
 import 'package:ecommerce_app/screens/bottom_bar.dart';
 import 'package:ecommerce_app/consts/theme_data.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
-import 'package:ecommerce_app/screens/carts.dart';
+import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/user_state.dart';
-import 'package:ecommerce_app/screens/wishlist.dart';
+import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -47,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Object>(
+    return FutureBuilder(
       future: _initialization,
       builder: (context, snapshot) {
         // Once complete, show your application
@@ -80,9 +82,11 @@ class _MyAppState extends State<MyApp> {
               create: (_)=>CartProvider(),
             ),
             ChangeNotifierProvider(
-                create: (_) => FavsProvider(),)
+                create: (_) => FavsProvider(),),
+            ChangeNotifierProvider(
+                create: (_) => OrdersProvider(), )
           ],
-          child: Consumer<DarkThemeProvider>(builder: (context, themData, child) {
+          child: Consumer<DarkThemeProvider>(builder: (context, themeChangeProvider, child) {
             return MaterialApp(
               title: 'ECommerce App',
               theme: Styles.themData(themeChangeProvider.darkTheme, context),
@@ -111,6 +115,8 @@ class _MyAppState extends State<MyApp> {
                     UploadProductForm(),
                 ForgetPassword.routeName: (ctx) =>
                     ForgetPassword(),
+                OrderScreen.routeName: (ctx) =>
+                    OrderScreen(),
               },
             );
           }),

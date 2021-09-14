@@ -1,14 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
 import 'package:ecommerce_app/screens/upload_product_form.dart';
-import 'package:ecommerce_app/screens/carts.dart';
+import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
-import 'package:ecommerce_app/screens/wishlist.dart';
+import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BackLayerMenu extends StatelessWidget {
+class BackLayerMenu extends StatefulWidget {
   BackLayerMenu({Key? key}) : super(key: key);
+
+  @override
+  _BackLayerMenuState createState() => _BackLayerMenuState();
+}
+
+class _BackLayerMenuState extends State<BackLayerMenu> {
+  FirebaseAuth _auth= FirebaseAuth.instance;
+
+  String? _userImageUrl;
+  String? _uid;
+  @override
+  void initState(){
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
+
+    final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
+        ? null
+        : await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc == null) {
+      return;
+    } else {
+      setState(() {
+        _userImageUrl = userDoc.get('imageUrl');
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +130,9 @@ class BackLayerMenu extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
                           image: DecorationImage(
-                              image: NetworkImage(
-                                  'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                              image: _userImageUrl == null
+                                  ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                  :NetworkImage(_userImageUrl!),
                               fit: BoxFit.fill)),
                     ),
                   ),

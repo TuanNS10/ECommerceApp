@@ -30,7 +30,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       try {
         await _auth.sendPasswordResetEmail(email: _emailAddress!.toLowerCase())
         .then((value) => Fluttertoast.showToast(
-            msg: "Một email vừa được gửi",
+            msg: "An email has been sen",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
@@ -60,7 +60,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
           SizedBox(height: 80,),
           Padding(padding: const EdgeInsets.all(8.0,),
           child: Text(
-              'Quên mật khẩu',
+              'Forget password ',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           )
           ),

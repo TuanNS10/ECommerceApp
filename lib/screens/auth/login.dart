@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
                             child: TextButton(onPressed: (){Navigator.pushNamed(context, ForgetPassword.routeName);},
-                                child: Text('Quên mật khẩu',
+                                child: Text('Forget password ',
                                 style: TextStyle(
                                   color: Colors.blue.shade900,
                                   decoration: TextDecoration.underline,

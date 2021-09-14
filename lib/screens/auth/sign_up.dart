@@ -30,7 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String _fullName = '';
   String _emailAddress = '';
   String _password = '';
-  late int _phoneNumber;
+  String _phoneNumber = '';
   File? _pickedImage;
   String url = '';
   final _formKey = GlobalKey<FormState>();
@@ -51,7 +51,8 @@ class _SignupScreenState extends State<SignupScreen> {
     FocusScope.of(context).unfocus();
     var date = DateTime.now().toString();
     var dateParse = DateTime.parse(date);
-    var formatDate = '${dateParse.day} - ${dateParse.month} - ${dateParse.year}';
+    var formatDate =
+        '${dateParse.day} - ${dateParse.month} - ${dateParse.year}';
     if (isValid) {
       setState(() {
         _isLoading = true;
@@ -60,6 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
       try {
         if (_pickedImage == null) {
           _globalMethods.authErrorHandle('Please pick an image', context);
+          print('Please pick an image');
         } else {
           final ref = FirebaseStorage.instance
               .ref()
@@ -83,7 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
             'createAt': Timestamp.now(),
           });
         }
-        Navigator.canPop(context)? Navigator.pop(context): null;
+        Navigator.canPop(context) ? Navigator.pop(context) : null;
       } catch (error) {
         _globalMethods.authErrorHandle(error.toString(), context);
         print('Error occurred $error');
@@ -304,7 +306,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             textInputAction: TextInputAction.next,
                             onEditingComplete: () => FocusScope.of(context)
                                 .requestFocus(_emailFocusNode),
-                            keyboardType: TextInputType.emailAddress,
+                            keyboardType: TextInputType.name,
                             decoration: InputDecoration(
                                 border: const UnderlineInputBorder(),
                                 filled: true,
@@ -348,8 +350,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             key: ValueKey('password'),
                             focusNode: _passwordFocusNode,
                             validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a valid Password';
+                              String pattern =
+                                  r'(^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$)';
+                              RegExp regExp = new RegExp(pattern);
+                              if (value!.length == 0) {
+                                return 'Please enter your password';
+                              } else if (!regExp.hasMatch(value)) {
+                                return 'Please enter valid minimum eight characters';
                               }
                               return null;
                             },
@@ -385,12 +392,16 @@ class _SignupScreenState extends State<SignupScreen> {
                             key: ValueKey('phoneNumber'),
                             focusNode: _phoneNumberFocusNode,
                             validator: (value) {
-                              if (value!.isEmpty || value.length > 11) {
-                                return 'Please enter a valid phone number';
+                              String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                              RegExp regExp = new RegExp(pattern);
+                              if (value!.length == 0) {
+                                return 'Please enter mobile number';
+                              } else if (!regExp.hasMatch(value)) {
+                                return 'Please enter valid mobile number';
                               }
                               return null;
                             },
-                            inputFormatters:[
+                            inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             textInputAction: TextInputAction.next,
@@ -403,7 +414,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 labelText: 'Phone Number',
                                 fillColor: Theme.of(context).backgroundColor),
                             onSaved: (value) {
-                              _phoneNumber = int.parse(value!);
+                              _phoneNumber = value!;
                             },
                           ),
                         ),
@@ -418,23 +429,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                 : ElevatedButton(
                                     style: ButtonStyle(
                                         shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30.0),
-                                                side: BorderSide(
-                                                    color: ColorsConsts
-                                                        .backgroundColor)))),
-                                    onPressed: () {
-                                      _submitForm();
-                                    },
+                                            RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        side: BorderSide(
+                                            color:
+                                                ColorsConsts.backgroundColor),
+                                      ),
+                                    )),
+                                    onPressed: _submitForm,
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           'Sign up',
                                           style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17),
                                         ),
                                         SizedBox(
                                           width: 5,
