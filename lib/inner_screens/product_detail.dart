@@ -113,47 +113,54 @@ class _ProductDetailsState extends State<ProductDetails> {
                               height: 8,
                             ),
                             Text(
-                              'US \$ ${prodAttr.price}',
+                              prodAttr.description,
                               style: TextStyle(
                                   color: themeState.darkTheme
                                       ? Theme.of(context).disabledColor
                                       : ColorsConsts.subTitle,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 21.0),
-                            )
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18.0),
+                            ),
+                            SizedBox(height: 8),
+                            Text( 'US \$ ${prodAttr.price}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 21.0,
+                                color: themeState.darkTheme
+                                    ? Theme.of(context).disabledColor
+                                    : ColorsConsts.subTitle,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 3.0,
+                        height: 8.0,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Divider(
-                          thickness: 1,
-                          color: Colors.grey,
-                          height: 1,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          prodAttr.description,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 18.0,
-                            color: themeState.darkTheme
-                                ? Theme.of(context).disabledColor
-                                : ColorsConsts.subTitle,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      //   child: Divider(
+                      //     thickness: 1,
+                      //     color: Colors.grey,
+                      //     height: 1,
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 5.0,
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(top:2.0, left: 16),
+                      //   child: Text( 'US \$ ${prodAttr.price}'
+                      //     ,
+                      //     style: TextStyle(
+                      //       fontWeight: FontWeight.w800,
+                      //       fontSize: 18.0,
+                      //       color: themeState.darkTheme
+                      //           ? Theme.of(context).disabledColor
+                      //           : ColorsConsts.subTitle,
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Divider(

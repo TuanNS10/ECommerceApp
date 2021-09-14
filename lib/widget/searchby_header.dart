@@ -1,10 +1,12 @@
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/user_info.dart';
 import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,24 @@ class SearchByHeader extends SliverPersistentHeaderDelegate {
       this.leading,
       this.action,
       required this.stackChild});
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String? _userImageUrl;
+  String? _uid;
+
+  void getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
+
+    final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
+        ? null
+        : await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc == null) {
+      return;
+    } else {
+      _userImageUrl = userDoc.get('imageUrl');
+    }
+  }
 
   @override
   Widget build(
@@ -123,9 +143,10 @@ class SearchByHeader extends SliverPersistentHeaderDelegate {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       image: DecorationImage(
-                          image: NetworkImage(
-                            'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg',
-                          ),
+                          image: _userImageUrl == null
+                              ? AssetImage('assets/images/cute.jpg')
+                                  as ImageProvider
+                              : NetworkImage(_userImageUrl!),
                           fit: BoxFit.cover)),
                 ),
               ),

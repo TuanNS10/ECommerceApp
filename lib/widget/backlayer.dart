@@ -4,6 +4,7 @@ import 'package:ecommerce_app/consts/my_icons.dart';
 import 'package:ecommerce_app/screens/upload_product_form.dart';
 import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
+import 'package:ecommerce_app/screens/user_info.dart';
 import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -126,14 +127,21 @@ class _BackLayerMenuState extends State<BackLayerMenu> {
                     decoration: BoxDecoration(
                         color: Theme.of(context).backgroundColor,
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.0),
-                          image: DecorationImage(
-                              image: _userImageUrl == null
-                                  ? AssetImage('assets/images/cute.jpg') as ImageProvider
-                                  :NetworkImage(_userImageUrl!),
-                              fit: BoxFit.fill)),
+                    child: InkWell(
+                      onTap:() => Navigator.push(
+                          context,
+                        MaterialPageRoute(
+                          builder: (context) => UserScreen(),
+                        ),),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            image: DecorationImage(
+                                image: _userImageUrl == null
+                                    ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                    :NetworkImage(_userImageUrl!),
+                                fit: BoxFit.fill)),
+                      ),
                     ),
                   ),
                 ),

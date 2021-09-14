@@ -23,7 +23,7 @@ class ProductsProvider with ChangeNotifier {
                     price: double.parse(element.get('price')), 
                     imageUrl: element.get('productImage'), 
                     productCategoryName: element.get('productCategory'), 
-                    brand: element.get('productDescription'), 
+                    brand: element.get('productBrand'),
                     quantity: int.parse(element.get('productQuantity')),
                     isPopular: true));
           });

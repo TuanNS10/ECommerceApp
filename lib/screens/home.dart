@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
+import 'package:ecommerce_app/screens/user_info.dart';
 import 'package:ecommerce_app/widget/backlayer.dart';
 import 'package:ecommerce_app/widget/category.dart';
 import 'package:ecommerce_app/widget/popular_products.dart';
@@ -38,28 +39,28 @@ class _HomeState extends State<HomeScreen> {
     'assets/images/huawei.jpg',
   ];
 
-  FirebaseAuth _auth= FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
   String? _userImageUrl;
   String? _uid;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getData();
   }
 
-  void getData() async{
-    User? user= _auth.currentUser;
-    _uid=user!.uid;
+  void getData() async {
+    User? user = _auth.currentUser;
+    _uid = user!.uid;
 
-    final DocumentSnapshot<Map<String,dynamic>>? userDoc= user.isAnonymous
-    ? null
-        :await FirebaseFirestore.instance.collection('users').doc(_uid).get();
-    if(userDoc == null)
+    final DocumentSnapshot<Map<String, dynamic>>? userDoc = user.isAnonymous
+        ? null
+        : await FirebaseFirestore.instance.collection('users').doc(_uid).get();
+    if (userDoc == null)
       return;
-    else{
+    else {
       setState(() {
-        _userImageUrl=userDoc.get('imageUrl');
+        _userImageUrl = userDoc.get('imageUrl');
       });
     }
   }
@@ -93,11 +94,12 @@ class _HomeState extends State<HomeScreen> {
                 child: CircleAvatar(
                   radius: 13,
                   backgroundImage: _userImageUrl == null
-                    ? AssetImage('assets/images/cute.jpg') as ImageProvider
-                    : NetworkImage(_userImageUrl!),
+                      ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                      : NetworkImage(_userImageUrl!),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => UserScreen())),
             )
           ],
         ),
