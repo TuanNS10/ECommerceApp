@@ -1,7 +1,12 @@
 import 'dart:core';
 
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/provider/dark_theme_provider.dart';
+import 'package:ecommerce_app/provider/favs_provider.dart';
+import 'package:ecommerce_app/provider/orders_provider.dart';
 import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/orders/order.dart';
 import 'package:ecommerce_app/screens/wishlist/wishlist.dart';
@@ -105,7 +110,7 @@ class _UserScreenState extends State<UserScreen> {
                                 image: DecorationImage(
                                     fit: BoxFit.fill,
                                     image: _userImageUrl == null
-                                        ? AssetImage('assets/images/cute.jpg')
+                                        ? AssetImage('assets/images/girl.jpg')
                                             as ImageProvider
                                         : NetworkImage(_userImageUrl!))),
                           ),
@@ -122,7 +127,7 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     background: Image(
                       image: _userImageUrl == null
-                          ? AssetImage('assets/images/cute.jpg')
+                          ? AssetImage('assets/images/girl.jpg')
                               as ImageProvider
                           : NetworkImage(_userImageUrl!),
                       fit: BoxFit.fill,
@@ -155,7 +160,25 @@ class _UserScreenState extends State<UserScreen> {
                       child: ListTile(
                         title: Text('Wishlist'),
                         trailing: Icon(Icons.chevron_right_rounded),
-                        leading: Icon(Feather.heart),
+                        leading: Consumer<FavsProvider>(
+                          builder: (_, fav, ch) => Badge(
+                            badgeColor: ColorsConsts.favColor,
+                            position: BadgePosition.topEnd(top: 5, end: 7),
+                            badgeContent: Text(
+                              fav.getFavsItems.length.toString(),
+                              style: TextStyle(color: ColorsConsts.white),
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Feather.heart,
+                                color: ColorsConsts.favColor,
+                              ),
+                              onPressed: () {
+                                Navigator.pushNamed(context, WishlistScreen.routeName);
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -169,7 +192,25 @@ class _UserScreenState extends State<UserScreen> {
                       child: ListTile(
                         title: Text('Cart'),
                         trailing: Icon(Icons.chevron_right_rounded),
-                        leading: Icon(Feather.shopping_cart),
+                        leading: Consumer<CartProvider>(
+                            builder: (_, cart, ch) => Badge(
+                              badgeColor: ColorsConsts.cartColor,
+                              position: BadgePosition.topEnd(top: 5, end: 7),
+                              badgeContent: Text(
+                                cart.getCartItems.length.toString(),
+                                style: TextStyle(color: ColorsConsts.white),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  Feather.shopping_cart,
+                                  color: ColorsConsts.cartColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, CartScreen.routeName);
+                                },
+                              ),
+                            ))
                       ),
                     ),
                   ),
@@ -182,7 +223,25 @@ class _UserScreenState extends State<UserScreen> {
                       child: ListTile(
                         title: Text('My Orders'),
                         trailing: Icon(Icons.chevron_right_rounded),
-                        leading: Icon(Feather.shopping_bag),
+                        leading: Consumer<OrdersProvider>(
+                            builder: (_, order, ch) => Badge(
+                              badgeColor: ColorsConsts.cartColor,
+                              position: BadgePosition.topEnd(top: 5, end: 7),
+                              badgeContent: Text(
+                                order.getOrders.length.toString(),
+                                style: TextStyle(color: ColorsConsts.white),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  Feather.shopping_bag,
+                                  color: ColorsConsts.cartColor,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, CartScreen.routeName);
+                                },
+                              ),
+                            ))
                       ),
                     ),
                   ),

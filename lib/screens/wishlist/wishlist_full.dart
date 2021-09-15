@@ -1,5 +1,7 @@
 import 'package:ecommerce_app/consts/colors.dart';
+import 'package:ecommerce_app/inner_screens/product_detail.dart';
 import 'package:ecommerce_app/models/favs_attr.dart';
+import 'package:ecommerce_app/models/product.dart';
 import 'package:ecommerce_app/provider/favs_provider.dart';
 import 'package:ecommerce_app/services/global_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,11 +21,12 @@ class _WishlistFullState extends State<WishlistFull> {
   @override
   Widget build(BuildContext context) {
     final favAttr = Provider.of<FavsAttr>(context);
+
     return Stack(
       children: <Widget>[
         Container(
           width: double.infinity,
-          margin: EdgeInsets.only(right: 30.0, bottom: 10.0),
+          margin: EdgeInsets.only(top: 2, left: 12, right: 30.0, bottom: 10.0),
           child: Material(
             color: Theme.of(context).backgroundColor,
             borderRadius: BorderRadius.circular(5.0),

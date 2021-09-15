@@ -144,7 +144,7 @@ class SearchByHeader extends SliverPersistentHeaderDelegate {
                       borderRadius: BorderRadius.circular(10.0),
                       image: DecorationImage(
                           image: _userImageUrl == null
-                              ? AssetImage('assets/images/cute.jpg')
+                              ? AssetImage('assets/images/girl.jpg')
                                   as ImageProvider
                               : NetworkImage(_userImageUrl!),
                           fit: BoxFit.cover)),

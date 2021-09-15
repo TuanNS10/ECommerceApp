@@ -1,10 +1,15 @@
+import 'package:badges/badges.dart';
+import 'package:ecommerce_app/consts/colors.dart';
 import 'package:ecommerce_app/consts/my_icons.dart';
+import 'package:ecommerce_app/provider/cart_provider.dart';
 import 'package:ecommerce_app/screens/cart/carts.dart';
 import 'package:ecommerce_app/screens/feeds.dart';
 import 'package:ecommerce_app/screens/home.dart';
 import 'package:ecommerce_app/screens/search.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/screens/user_info.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
 
 class BottomBarScreen extends StatefulWidget {
   static const routeName = '/BottomBarScreen';
@@ -66,7 +71,22 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
                 label: 'Search',
               ),
               BottomNavigationBarItem(
-                icon: Icon(MyAppIcons.bag),
+                icon: Consumer<CartProvider>(
+                    builder: (_, cart, ch) => Badge(
+                      badgeColor: ColorsConsts.cartColor,
+                      position: BadgePosition.topEnd(top: 5, end: 7),
+                      badgeContent: Text(
+                        cart.getCartItems.length.toString(),
+                        style: TextStyle(color: ColorsConsts.white),
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Feather.shopping_cart,
+                          color: ColorsConsts.cartColor,
+                        ),
+                        onPressed: () {}
+                      ),
+                    )),
                 tooltip: 'Cart',
                 label: 'Cart',
               ),

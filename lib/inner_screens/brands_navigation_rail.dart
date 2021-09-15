@@ -167,7 +167,7 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
                           child: CircleAvatar(
                             radius: 16,
                             backgroundImage: _userImageUrl == null
-                                ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                ? AssetImage('assets/images/girl.jpg') as ImageProvider
                                 :NetworkImage(_userImageUrl!),
                           ),
                         ),

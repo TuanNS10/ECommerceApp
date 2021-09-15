@@ -23,10 +23,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   List _carouselImages = [
-    'assets/images/carousel1.png',
-    'assets/images/carousel2.jpeg',
-    'assets/images/carousel3.jpg',
-    'assets/images/carousel4.png',
+    'assets/images/person_shopping1.jpg',
+    'assets/images/person_shopping2.jpg',
+    'assets/images/person_shopping3.jpg',
+    'assets/images/person_shopping4.jpg'
   ];
 
   List _brandImages = [
@@ -94,7 +94,7 @@ class _HomeState extends State<HomeScreen> {
                 child: CircleAvatar(
                   radius: 13,
                   backgroundImage: _userImageUrl == null
-                      ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                      ? AssetImage('assets/images/girl.jpg') as ImageProvider
                       : NetworkImage(_userImageUrl!),
                 ),
               ),

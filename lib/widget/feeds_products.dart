@@ -21,7 +21,7 @@ class _FeedsProductsState extends State<FeedsProducts> {
         onTap: () => Navigator.pushNamed(context, ProductDetails.routeName, arguments: productsAttributes.id),
         child: Container(
           width: 250,
-          height: 290,
+          height: 280,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               color: Theme.of(context).backgroundColor),
@@ -32,7 +32,7 @@ class _FeedsProductsState extends State<FeedsProducts> {
                   ClipRect(
                     child: Container(
                       width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.2,
                       child: Image.network(
                         productsAttributes.imageUrl,
                         fit: BoxFit.contain,
@@ -60,6 +60,16 @@ class _FeedsProductsState extends State<FeedsProducts> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 28,),
+                    Text(
+                      productsAttributes.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(
                       height: 4,
                     ),
@@ -73,7 +83,7 @@ class _FeedsProductsState extends State<FeedsProducts> {
                           fontWeight: FontWeight.w600),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
                       child: Text(
                         ' \$ ${productsAttributes.price}',
                         overflow: TextOverflow.ellipsis,
@@ -88,7 +98,7 @@ class _FeedsProductsState extends State<FeedsProducts> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${productsAttributes.quantity}',
+                          'Quantity: ${productsAttributes.quantity}',
                           style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey,

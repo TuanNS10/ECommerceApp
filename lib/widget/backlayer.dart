@@ -138,7 +138,7 @@ class _BackLayerMenuState extends State<BackLayerMenu> {
                             borderRadius: BorderRadius.circular(20.0),
                             image: DecorationImage(
                                 image: _userImageUrl == null
-                                    ? AssetImage('assets/images/cute.jpg') as ImageProvider
+                                    ? AssetImage('assets/images/girl.jpg') as ImageProvider
                                     :NetworkImage(_userImageUrl!),
                                 fit: BoxFit.fill)),
                       ),

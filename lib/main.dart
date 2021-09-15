@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:ecommerce_app/inner_screens/brands_navigation_rail.dart';
 import 'package:ecommerce_app/inner_screens/categories_feeds.dart';
 import 'package:ecommerce_app/inner_screens/product_detail.dart';
