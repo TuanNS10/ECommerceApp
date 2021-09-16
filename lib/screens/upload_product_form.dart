@@ -395,8 +395,8 @@ class _UploadProductFormState extends State<UploadProductForm> {
                                   value: 'Clothes',
                                 ),
                                 DropdownMenuItem(
-                                  child: Text('Beauty & healthy'),
-                                  value: 'Beauty & healthy',
+                                  child: Text('Beauty & Healthy'),
+                                  value: 'Beauty&healthy',
                                 ),
                                 DropdownMenuItem(
                                   child: Text('Shoes'),

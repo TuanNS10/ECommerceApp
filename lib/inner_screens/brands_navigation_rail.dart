@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/inner_screens/brands_rail_widget.dart';
 import 'package:ecommerce_app/provider/products_provider.dart';
+import 'package:ecommerce_app/screens/user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -163,12 +164,22 @@ class _BrandNavigationRailScreenState extends State<BrandNavigationRailScreen> {
                         SizedBox(
                           height: 20,
                         ),
-                        Center(
-                          child: CircleAvatar(
-                            radius: 16,
-                            backgroundImage: _userImageUrl == null
-                                ? AssetImage('assets/images/girl.jpg') as ImageProvider
-                                :NetworkImage(_userImageUrl!),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(10.0),
+                          splashColor: Colors.grey,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UserScreen(),
+                            ),
+                          ),
+                          child: Center(
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundImage: _userImageUrl == null
+                                  ? AssetImage('assets/images/girl.jpg') as ImageProvider
+                                  :NetworkImage(_userImageUrl!),
+                            ),
                           ),
                         ),
                         SizedBox(
