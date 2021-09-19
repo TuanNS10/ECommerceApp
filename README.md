@@ -1,16 +1,14 @@
-# ecommerce_app
+# ECommerce App
+## About App
+A new Flutter project. Build Ecommerce App with Firebase to cover Flutter and Firebase concepts&Stripe payment integration
 
-A new Flutter project.
+![alt text](https://firebasestorage.googleapis.com/v0/b/storeapp-64058.appspot.com/o/usersImages%2Fbackground.png?alt=media&token=676d29f0-3495-44bd-8398-85ecc2abf397)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+- Sign up
+- Sign in
+- Dark theme
+- Send mail reset password
+- Cart, Orders history, Feeds,
+- Upload product
+- Search Product by Title
